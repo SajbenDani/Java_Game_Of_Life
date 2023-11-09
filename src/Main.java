@@ -28,8 +28,9 @@ public class Main {
         //System.out.println(game.getGrid().getList().get(8));
         //System.out.println();
         //game.startGame();*/
-        GameOfLifeFrame game = new GameOfLifeFrame(100, 100);
-
+        //GameOfLifeFrame game = new GameOfLifeFrame(100, 100);
+        MenuFrame menuFrame = new MenuFrame();
+        menuFrame.setVisible(true);
         //todo: serializácios mentes, egy menu amibol belehet tolteni elozzo beallitast vagy uj jatekot kezdeni, illetve valami settings ful ahol meg lehet adni a paraméter hogy mekkora legyen a grid
 
 
