@@ -1,0 +1,20 @@
+
+’
+java:S1319"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(”õòúøÿÿÿÿ8»Â«¨»1
+
+java:S1319-"pThe return type of this method should be an interface such as "List" rather than the implementation "ArrayList".(†½îĞ8¼Â«¨»1
+5
+java:S1700"Rename field "grid"(ü¶Š¶ÿÿÿÿÿ8¾Â«¨»1
+7
+java:S1220""Move this file to a named package.8¾Â«¨»1
+]	java:S125"<This block of commented-out lines of code should be removed.(É®·‡ıÿÿÿÿ8ÖÄ«¨»1
+_
+java:S1126"BReplace this if-then-else statement by a single method invocation.(¦éµğ8ÛÄ«¨»1
+t
+java:S3776X"RRefactor this method to reduce its Cognitive Complexity from 24 to the 15 allowed.(¶Õ§’øÿÿÿÿ8ºŒ­¨»1
+`
+java:S1854Y">Remove this useless assignment to local variable "szomszedok".(•Ğ½ãşÿÿÿÿ8ç®¨»1
+L	java:S106]"+Replace this use of System.out by a logger.(Œ”ğ¬ùÿÿÿÿ8¼Œ­¨»1
+G	java:S106e"+Replace this use of System.out by a logger.(ıÚø8¿Œ­¨»1
+X	java:S125m"<This block of commented-out lines of code should be removed.(³…ã£8ƒ”½¨»1
+]	java:S125u"<This block of commented-out lines of code should be removed.(°¬øûÿÿÿÿ8ä»¿¨»1

@@ -1,0 +1,23 @@
+
+g	java:S112-"FDefine and throw a dedicated exception instead of using a generic one.(¼ÿ¾¹ÿÿÿÿÿ8Æë€²»1
+D
+java:S1604&"(Make this anonymous inner class a lambda(Ï¹§8Éë€²»1
+J
+java:S16046"(Make this anonymous inner class a lambda(Ü¨¾ÿÿÿÿÿ8Éë€²»1
+E
+java:S1604?"(Make this anonymous inner class a lambda(Ï¸8Éë€²»1
+7
+java:S1220""Move this file to a named package.8Êë€²»1
+H
+java:S1948
+"&Make "game" transient or serializable.(üš÷Œüÿÿÿÿ8Øë€²»1
+k
+java:S3252"IUse static access with "javax.swing.WindowConstants" for "EXIT_ON_CLOSE".(Õû»öşÿÿÿÿ8Úë€²»1
+€
+java:S2142,"^Either re-interrupt this method or rethrow the "InterruptedException" that can be caught here.(è®ã¶øÿÿÿÿ8Ûë€²»1
+”
+java:S1130q"wRemove the declaration of thrown exception 'java.lang.InterruptedException', as it cannot be thrown from method's body.(Ê¾ü8àë€²»1
+{
+java:S2142}"^Either re-interrupt this method or rethrow the "InterruptedException" that can be caught here.(ä ¹€8áë€²»1
+Y	java:S125‚"<This block of commented-out lines of code should be removed.(ü˜“8âë€²»1
+^	java:S125‘"<This block of commented-out lines of code should be removed.(Ÿ“Äòûÿÿÿÿ8âë€²»1

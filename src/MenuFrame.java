@@ -2,31 +2,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 public class MenuFrame extends JFrame {
-    private JPanel panel;
     private GameOfLifeFrame gameFrame;
 
     public MenuFrame() {
-        /*setTitle("Menu");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        panel = new JPanel(new FlowLayout());
-        add(panel, BorderLayout.CENTER);
-        JButton newGame = new JButton("New Game");
-        JButton load = new JButton("Load Game");
 
-        newGame.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                    try {
-
-                    } catch (InterruptedException ex) {
-                        throw new RuntimeException(ex);
-                    }
-                }
-
-            }
-        });*/
         setTitle("Game of Life Menu");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(300, 150);
@@ -47,7 +29,14 @@ public class MenuFrame extends JFrame {
         loadGameItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Implement the load game functionality here
+                FileIO fileIO = new FileIO(File.separator + "mentes");
+                GameOfLife loadedGame = fileIO.loadGame("saved_game_name");
+                if (loadedGame != null) {
+                    gameFrame.dispose();
+                    gameFrame = new GameOfLifeFrame(loadedGame.getGrid().getSor(), loadedGame.getGrid().getOszlop());
+                    gameFrame.setGame(loadedGame);
+                    gameFrame.setVisible(true);
+                }
             }
         });
 

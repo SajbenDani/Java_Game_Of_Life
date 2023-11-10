@@ -14,6 +14,8 @@ public class Grid {
             grid.add(new Cell(false));
         }
     }
+    public int getSor() { return sor; }
+    public int getOszlop() { return oszlop; }
 
     public ArrayList<Cell> getList() {
         return grid;

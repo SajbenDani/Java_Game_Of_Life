@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class GameOfLifeFrame extends JFrame{
@@ -30,6 +31,7 @@ public class GameOfLifeFrame extends JFrame{
         aliveField = new JTextField(8);
         JButton startButton = new JButton("Start");
         JButton stopButton = new JButton("Stop");
+        JButton saveButton = new JButton("save");
 
         game.initializeGame(sor, oszlop); //ide ez nem kell mert benne van a start gamben
 
@@ -47,12 +49,25 @@ public class GameOfLifeFrame extends JFrame{
             }
         });
 
+
+
         stopButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (running.get()) {
                     stopGame();
                 }
+            }
+        });
+
+        saveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!running.get()) {
+                    FileIO fileIO = new FileIO( System.getProperty("user.dir")+ File.separator + "mentes" + File.separator);
+                    fileIO.saveGame("saved_game_name", game);
+                }
+
             }
         });
 
@@ -64,6 +79,7 @@ public class GameOfLifeFrame extends JFrame{
         controlPanel.add(aliveField);
         controlPanel.add(startButton);
         controlPanel.add(stopButton);
+        controlPanel.add(saveButton);
         add(controlPanel, BorderLayout.SOUTH);
 
         setSize(600, 800);
@@ -80,6 +96,9 @@ public class GameOfLifeFrame extends JFrame{
                 gridPanel.add(cell);
             }
         }
+    }
+    public void setGame(GameOfLife game) {
+        this.game = game;
     }
     private void updateGrid() {
         for (int i = 0; i < game.getGrid().getList().size(); i++) {
