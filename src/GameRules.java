@@ -1,4 +1,6 @@
-public class GameRules {
+import java.io.Serializable;
+
+public class GameRules implements Serializable {
 
     private int[] survivalRules;
     private int[] birthRules;

@@ -1,10 +1,10 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Grid {
+public class Grid implements Serializable {
     private int sor; //1-tol indexel
     private int oszlop; //1-tol indexel
-    //private Cell[][] grid;
-    private ArrayList<Cell> grid;
+    private ArrayList<Cell> grid;  //2 dimenziós tömb helyett listát használunk, könnyebb vele dolgozni (előre elkészített fügvények)
     public Grid(int rows, int cols) {
         int count = rows*cols;
         sor = rows;
@@ -22,30 +22,13 @@ public class Grid {
     }
     public void toggleCell(int row, int col){
         int hanyadik = row*oszlop+col;
-        if(grid.get(hanyadik).isAlive())
-            grid.get(hanyadik).setState(false);
-        else
-            grid.get(hanyadik).setState(true);
-    }
-    public boolean getCellValue(int row, int col){
-        int hanyadik = row*oszlop+col;
-        return grid.get(hanyadik).state;
+        grid.get(hanyadik).toggleState();
     }
 
-    public void setCellAlive(int row, int col){
-        int hanyadik = row*oszlop+col;
-        grid.get(hanyadik).setState(true);
-    }
-
-    public void setCellDead(int row, int col){
-        int hanyadik = row*oszlop+col;
-        grid.get(hanyadik).setState(false);
-    }
-
-    public ArrayList<Cell> getNeighbours(int row, int col) {  //ez fasza
+    public ArrayList<Cell> getNeighbours(int row, int col) {  //szzomszédok meghatározása
         ArrayList<Cell> szomszedok = new ArrayList<>();
 
-        // Check and add neighbors to the left and right
+        // szomszédok balra és jobbra
         if (col > 0) {
             szomszedok.add(grid.get((row * oszlop) + col - 1));
         }
@@ -53,7 +36,7 @@ public class Grid {
             szomszedok.add(grid.get((row * oszlop) + col + 1));
         }
 
-        // Check and add neighbors above and below
+        // felső és alsó szomszédok
         if (row > 0) {
             szomszedok.add(grid.get(((row - 1) * oszlop) + col));
             if (col > 0) {
@@ -76,7 +59,7 @@ public class Grid {
         return szomszedok;
     }
 
-
+    //segéd függvények, hogy indexből megkapjuk a sort és oszlopot
     public int calculateRow(int index){
         int i = index/oszlop;
         return (i);
@@ -85,43 +68,36 @@ public class Grid {
         int i= (index%oszlop);
         return (i);
     }
-    public void calculateNextGeneration(GameRules rules) {
-        ArrayList<Cell> szomszedok = new ArrayList<>();
+    public void calculateNextGeneration(GameRules rules) {  //következő állapot kiszámítása
+        ArrayList<Cell> szomszedok; //ide nem kell new hisz ezt egyelővé fogjuk tenni a getNeighbours return-ével
         ArrayList<Cell> nextGeneration = new ArrayList<>();
 
         for (int i = 0; i < grid.size(); i++) {
-            System.out.println("Processing cell " + i);
             szomszedok = getNeighbours(calculateRow(i), calculateCol(i));
-            int elo = 0;
+            int elo = 0;  //élő szomszédok meghatározása
             for (Cell it : szomszedok) {
                 if (it.isAlive())
                     elo++;
             }
             boolean nextState = false;
-            System.out.println("Alive neighbors for cell " + i + ": " + elo);
             if (!(grid.get(i).isAlive())) {
                 for (int j : rules.getBirthRules()) {
-                    if (elo == j) {
+                    if (elo == j) {  //szabályokkal való összehasonlítás(halott eset)
                         nextState = true;
                         break;
                     }
                 }
-                //grid.get(i).setState(temp);
             } else { //grid state true
                 for (int rule : rules.getSurvivalRules()) {
-                    if (elo == rule) {
+                    if (elo == rule) {  //szabályokkal való összehasonlítás (élő eset)
                         nextState = true;
                         break;
                     }
                 }
-                //grid.get(i).setState(survives);
-                /*if (!survives) {
-                    grid.get(i).toggleState();
-                }*/
             }
-            nextGeneration.add(new Cell(nextState));
+            nextGeneration.add(new Cell(nextState));  //if-elseből kapott értékre eltárolása
         }
-        for (int i = 0; i < grid.size(); i++) {
+        for (int i = 0; i < grid.size(); i++) {  //a cellák értékének beállítása
             grid.get(i).setState(nextGeneration.get(i).isAlive());
         }
     }

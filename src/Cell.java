@@ -1,4 +1,6 @@
-public class Cell {
+import java.io.Serializable;
+
+public class Cell implements Serializable {
     boolean state;
     Cell(boolean state) { this.state = state; }
     public boolean isAlive() {
@@ -16,9 +18,6 @@ public class Cell {
         }
     }
 
-    public boolean getState() {
-        return state;
-    }
     public void setState(boolean x){
         state = x;
     }
