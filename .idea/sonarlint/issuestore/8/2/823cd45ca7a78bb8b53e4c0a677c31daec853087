@@ -1,9 +1,3 @@
 
 7
 java:S1220""Move this file to a named package.8Ò¯ú°»1
-]	java:S125"<This block of commented-out lines of code should be removed.(îøÀïûÿÿÿÿ8ðÚü°»1
-L	java:S106"+Replace this use of System.out by a logger.(µ…©øÿÿÿÿ8«Þš²»1
-Z
-java:S2118"=Make the "GameOfLife" class "Serializable" or don't write it.(þØæ¡8Ó»ÿ°»1
-M
-java:S1128"0Remove this unused import 'java.util.ArrayList'.(÷‰îƒ8¿ÿ¯±»1

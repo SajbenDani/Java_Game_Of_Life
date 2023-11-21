@@ -94,8 +94,8 @@ public class MenuFrame extends JFrame {
     //inicializálás beállítása
     private void showNewGameDialog() {
         //sorok és oszlopok beállítása
-        int rows = Integer.parseInt(JOptionPane.showInputDialog("Enter the number of rows:"));
-        int cols = Integer.parseInt(JOptionPane.showInputDialog("Enter the number of columns:"));
+        int cols = Integer.parseInt(JOptionPane.showInputDialog("Enter the size of the table:"));
+        int rows = cols;
         //ha esetleg már van nyitva játék és újjat nyitunk akkor azt felülírja
         if (gameFrame != null) {
             gameFrame.dispose();
