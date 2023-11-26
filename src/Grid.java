@@ -4,7 +4,13 @@ import java.util.ArrayList;
 public class Grid implements Serializable {
     private int sor; //1-tol indexel
     private int oszlop; //1-tol indexel
-    private ArrayList<Cell> grid;  //2 dimenziós tömb helyett listát használunk, könnyebb vele dolgozni (előre elkészített fügvények)
+    /**
+     * 2 dimenziós tömb helyett listát használunk, könnyebb vele dolgozni (előre elkészített fügvények)
+     * */
+    private ArrayList<Cell> grid;
+    /**
+     * Grid konstruktora hanyszor hanyas legyen.
+     * */
     public Grid(int rows, int cols) {
         int count = rows*cols;
         sor = rows;
@@ -14,18 +20,38 @@ public class Grid implements Serializable {
             grid.add(new Cell(false));
         }
     }
+    /**
+     * @return visszaadja, hogy hány sor van
+     * */
     public int getSor() { return sor; }
+    /**
+     * @return visszaadja, hogy hány oszlop van
+     * */
     public int getOszlop() { return oszlop; }
 
+    /**
+     * @return visszaadja a listát, amiben tároljuk a gridet
+     * */
     public ArrayList<Cell> getList() {
         return grid;
     }
+    /**
+     * megváltoztatjuk a cella állapotát
+     * @param row hanyadik sorban van a cella
+     * @param col hanyadik oszlopban van a cella
+     * */
     public void toggleCell(int row, int col){
         int hanyadik = row*oszlop+col;
         grid.get(hanyadik).toggleState();
     }
-
-    public ArrayList<Cell> getNeighbours(int row, int col) {  //szzomszédok meghatározása
+    /**
+     * szzomszédok meghatározása
+     * @return visszaad egy listát, amiben a szomszédok vannak
+     * @param row hanyadik sorban van a cella
+     * @param col hanyadik oszlopban van a cella
+     *
+     * */
+    public ArrayList<Cell> getNeighbours(int row, int col) {
         ArrayList<Cell> szomszedok = new ArrayList<>();
 
         // szomszédok balra és jobbra
@@ -59,22 +85,38 @@ public class Grid implements Serializable {
         return szomszedok;
     }
 
-    //segéd függvények, hogy indexből megkapjuk a sort és oszlopot
+    /**
+     * segéd függvények, hogy indexből megkapjuk a sort
+     * @param index hanyadik a listában
+     * @return hanyadik sor
+     * */
     public int calculateRow(int index){
         int i = index/oszlop;
         return (i);
     }
+    /**
+     * segéd függvények, hogy indexből megkapjuk a az oszlopot
+     * @param index hanyadik a listában
+     * @return hanyadik oszlop
+     * */
     public int calculateCol(int index){
         int i= (index%oszlop);
         return (i);
     }
-    public void calculateNextGeneration(GameRules rules) {  //következő állapot kiszámítása
-        ArrayList<Cell> szomszedok; //ide nem kell new hisz ezt egyelővé fogjuk tenni a getNeighbours return-ével
+
+    /**
+     * következő állapot kiszámítása
+     * élő szomszédok meghatározása
+     * szabályokkal való összehasonlítás(halott esetben, illetve élőben)
+     * változtatások mentése egy listába, ami alapján beállítjuk a az eredeti grid listában a cellák állapotát.
+     * */
+    public void calculateNextGeneration(GameRules rules) {
+        ArrayList<Cell> szomszedok;
         ArrayList<Cell> nextGeneration = new ArrayList<>();
 
         for (int i = 0; i < grid.size(); i++) {
             szomszedok = getNeighbours(calculateRow(i), calculateCol(i));
-            int elo = 0;  //élő szomszédok meghatározása
+            int elo = 0;
             for (Cell it : szomszedok) {
                 if (it.isAlive())
                     elo++;

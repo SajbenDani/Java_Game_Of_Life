@@ -12,8 +12,11 @@ public class GameOfLifeFrame extends JFrame{
     private JTextField birthField;
     private JTextField aliveField;
     private AtomicBoolean running = new AtomicBoolean(false);
+    /**
+     * Alap GameOfLife interface beállítások, illetve a játék inicializása függvénnyel.
+     * */
     public GameOfLifeFrame(int rows, int cols) {
-        //Alap GameOfLife interface beállítások
+
         this.sor = rows;
         this.oszlop = cols;
         game = new GameOfLife();
@@ -36,10 +39,13 @@ public class GameOfLifeFrame extends JFrame{
         JTextField savedNameText = new JTextField(10);
         JButton saveButton = new JButton("save");
 
-        //játék inicializása
+
         game.initializeGame(sor, oszlop);
 
-        startButton.addActionListener(new ActionListener() {  //Start button feladata, elindítja a számításokat
+        /**
+         * Start button feladata, elindítja a számításokat, ha nem fut eleve
+         * */
+        startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (!running.get()) {
@@ -54,7 +60,9 @@ public class GameOfLifeFrame extends JFrame{
         });
 
 
-
+        /**
+        * Stop button feladata, leállítja a számításokat, ha fut a játék.
+        * */
         stopButton.addActionListener(new ActionListener() {  //Stop button feladata, leállítja a számításokat
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -64,9 +72,15 @@ public class GameOfLifeFrame extends JFrame{
             }
         });
 
-        saveButton.addActionListener(new ActionListener() {  //Save button feladata, elmenti a játék állását a textfieldben lévő néven
+        /**
+         * Save button feladata, elmenti a játék állását a textfieldben lévő néven, ha fut a játék leállítja
+         * */
+        saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (running.get()) {
+                    stopGame();
+                }
                 if (!running.get()) {
                     FileIO fileIO = new FileIO( System.getProperty("user.dir")+ File.separator + "mentes" + File.separator);
                     fileIO.saveGame(savedNameText.getText(), game);
@@ -92,7 +106,10 @@ public class GameOfLifeFrame extends JFrame{
         setVisible(true);
     }
 
-    //Grid inicializálása, a JPanel tipusú cellához rendelünk egy "mouse listener"-t (ezek egy-egy sejtet reprezentálnak)
+
+    /**
+     * Grid inicializálása, a JPanel tipusú cellához rendelünk egy "mouse listener"-t (ezek egy-egy sejtet reprezentálnak)
+     * */
     private void initializeGrid() {
         for (int i = 0; i < sor; i++) {
             for (int j = 0; j < oszlop; j++) {
@@ -104,15 +121,20 @@ public class GameOfLifeFrame extends JFrame{
             }
         }
     }
-    //segéd függvény a MenuFrame-hez kell
+    /**
+     * segéd függvény a MenuFrameben használjuk, beállítja a "game" private változót.
+     * @param game ez lesz a beállított változó értéke
+     * */
     public void setGame(GameOfLife game) {
         this.game = game;
     }
 
-    //Frissíti a tábla állapotát
+    /**
+     * Frissíti a tábla állapotát
+     * Az élő és halott sejtek színének beállításánál, "getComponent" használata, hisz a 2 dimenziós táblát egy listaként tároljuk
+     * */
     public void updateGrid() {
         for (int i = 0; i < game.getGrid().getList().size(); i++) {
-            //élő és halott sejtek színének beállítása, "getComponent" használata, hisz a 2 dimenziós táblát egy listában tároljuk
             if (game.getGrid().getList().get(i).isAlive()) {
                 gridPanel.getComponent(i).setBackground(Color.BLACK);
             } else {
@@ -121,7 +143,14 @@ public class GameOfLifeFrame extends JFrame{
         }
     }
 
-    private void startGame() throws InterruptedException {  //elindítja a játékot
+    /**
+     * elindítja a játékot
+     * beállítja a "textfield"-ben megadott paraméterek alapján a szabályokat
+     * ellindítja a játékot
+     * fél másodpercenként léptet egyet, és frissül a mező, itt kezelünk kivételeket is.
+     * létrehozunk egy új threadet, melynek meghívjuk a start metódusát, mely elindítja a "{}" ben lévő kódot, a lambda egy "run" függvényt képvisel, ami a Runnable interface egy metódusa
+     * */
+    private void startGame() throws InterruptedException {
         int[] birthRules = parseRules(birthField.getText());
         int[] survivalRules = parseRules(aliveField.getText());
         game.setRules(survivalRules, birthRules);
@@ -137,24 +166,34 @@ public class GameOfLifeFrame extends JFrame{
                     e.printStackTrace();
                 }
             }
-        }).start(); //létrehozunk egy új threadet, melynek meghívjuk a start metódusát, mely elindítja a "{}" ben lévő kódot, a lambda egy "run" függvényt képvisel, ami a Runnable interface egy metódusa
+        }).start();
     }
 
-    private void stopGame() { //játék leállítása
+    /**
+     * játék leállítása
+     * */
+    private void stopGame() {
         running.set(false);
     }
 
-    private int[] parseRules(String rulesText) {  //a textfieldből a szabályok kiolvasása, megfelelő formátumba
+    /**
+     * A textfieldből a szabályok kiolvasása, megfelelő formátumba
+     * fontos, hogy max 8 szomszédunk van
+     * helyes formátum ellenőrzése is megtörténik
+     * @param rulesText szabályok melyet a függvényünk beolvas és beállítja a formátumot
+     * @return szabályokat visszadjuk
+     * */
+    private int[] parseRules(String rulesText) {
         String[] ruleStrings = rulesText.split(" ");
         if (ruleStrings.length > 8) {
-            throw new IllegalArgumentException("Too many rules. Maximum is 8 rules.");  //fontos hisz max 8 szomszédunk van
+            throw new IllegalArgumentException("Too many rules. Maximum is 8 rules.");
         }
 
         int[] rules = new int[ruleStrings.length];
 
         try {
             for (int i = 0; i < ruleStrings.length; i++) {
-                rules[i] = Integer.parseInt(ruleStrings[i]);  //helyes formátum ellenőrzése is megtörténik
+                rules[i] = Integer.parseInt(ruleStrings[i]);
             }
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("Invalid rule format. Please provide integers separated by spaces.");
@@ -162,26 +201,38 @@ public class GameOfLifeFrame extends JFrame{
 
         return rules;
     }
-
-    public void setBirthFieldText(String birth) {  //segéd függvény a MenuFramehez
+    /**
+     * segéd függvény, melyet a MenuFrameben használunk
+     * @param birth születési szabály, melyet berak a birthFieldbe.
+     * */
+    public void setBirthFieldText(String birth) {
         birthField.setText(birth);
     }
-
-    public void setAliveFieldText(String alive) {  //segéd függvény a MenuFramehez
+    /**
+     * segéd függvény, melyet a MenuFrameben használunk
+     * @param alive tulélés szabályai, melyet berak az aliveFieldbe.
+     * */
+    public void setAliveFieldText(String alive) {
         aliveField.setText(alive);
     }
 
-    private class CellMouseListener extends MouseAdapter {  //belső class a mause listenerhez (gridhez)
+    /**
+     * belső class a mouse listenerhez (gridhez), A MouseAdapter classból örököl
+     * van 2 paraméteres konstruktor, ami beállítja a helyi változókat
+     * A Listenerben, a sok számolás lényege, hogy a 2 dimenziós tömb helyett, listában tároljuk a táblát, mert az könnyebben kezelhető, előre definiált függvényekkel.
+     * Kattintás esetén megváltoztatja a cella állapotát és színét
+     * */
+    private class CellMouseListener extends MouseAdapter {
         private int row;
         private int col;
 
-        public CellMouseListener(int row, int col) {  //konstruktor
+        public CellMouseListener(int row, int col) {
             this.row = row;
             this.col = col;
         }
 
         @Override
-        public void mouseClicked(MouseEvent e) {  //Listener, a sok számolás lényege, hogy a 2 dimenziós tömb helyett, listában tároljuk a táblát, mert az könnyebben kezelhető, előre definiált függvényekkel.
+        public void mouseClicked(MouseEvent e) {
             int hanyadik = row * oszlop + col;
             if (game != null) {
                 game.toggleCell(row, col);
