@@ -13,6 +13,10 @@ public class FileIO {
      * @param game melyik gamet mentse el
      * */
     public void saveGame(String filename, GameOfLife game) {
+        if(game.getRules() == null){
+            JOptionPane.showMessageDialog(null,"Nem lehetséges helyes szabályok nélkül menteni");
+            return;
+        }
         try (FileOutputStream fileOut = new FileOutputStream(saveDirectory + filename + ".txt");
              ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
             out.writeObject(game); //a játék állapotát

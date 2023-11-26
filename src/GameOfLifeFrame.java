@@ -52,7 +52,8 @@ public class GameOfLifeFrame extends JFrame{
                     try {
                         startGame();
                     } catch (InterruptedException ex) {
-                        throw new RuntimeException(ex);
+                        //throw new RuntimeException(ex);
+                        JOptionPane.showMessageDialog(null,"Nem sikerült a játékot elindítani");
                     }
                 }
 
@@ -151,20 +152,34 @@ public class GameOfLifeFrame extends JFrame{
      * létrehozunk egy új threadet, melynek meghívjuk a start metódusát, mely elindítja a "{}" ben lévő kódot, a lambda egy "run" függvényt képvisel, ami a Runnable interface egy metódusa
      * */
     private void startGame() throws InterruptedException {
-        int[] birthRules = parseRules(birthField.getText());
-        int[] survivalRules = parseRules(aliveField.getText());
+        int[] birthRules = new int[0];
+        try {
+            birthRules = parseRules(birthField.getText());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Hibás szabályt adott meg");
+            return;
+        }
+        int[] survivalRules = new int[0];
+        try {
+            survivalRules = parseRules(aliveField.getText());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Hibás szabályt adott meg");
+            return;
+        }
         game.setRules(survivalRules, birthRules);
         running.set(true);
 
         new Thread(() -> {
             while (running.get()) {
+
+                game.getGrid().calculateNextGeneration(game.getRules());
+                updateGrid();
                 try {
-                    game.getGrid().calculateNextGeneration(game.getRules());
-                    updateGrid();
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    throw new RuntimeException(e);
                 }
+
             }
         }).start();
     }
@@ -186,18 +201,17 @@ public class GameOfLifeFrame extends JFrame{
     private int[] parseRules(String rulesText) {
         String[] ruleStrings = rulesText.split(" ");
         if (ruleStrings.length > 8) {
-            throw new IllegalArgumentException("Too many rules. Maximum is 8 rules.");
+            //throw new IllegalArgumentException("Too many rules. Maximum is 8 rules.");
+            JOptionPane.showMessageDialog(null,"túl sok szabály, max 8!");
         }
 
         int[] rules = new int[ruleStrings.length];
 
-        try {
+
             for (int i = 0; i < ruleStrings.length; i++) {
                 rules[i] = Integer.parseInt(ruleStrings[i]);
             }
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Invalid rule format. Please provide integers separated by spaces.");
-        }
+
 
         return rules;
     }

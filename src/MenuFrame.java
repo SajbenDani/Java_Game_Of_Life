@@ -28,7 +28,11 @@ public class MenuFrame extends JFrame {
         newGameItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                showNewGameDialog();
+                try {
+                    showNewGameDialog();
+                }catch (NumberFormatException hiba){
+                    JOptionPane.showMessageDialog(null,"Nem megfelelő a formátum");
+                }
             }
         });
         /**
@@ -121,11 +125,17 @@ public class MenuFrame extends JFrame {
         int cols = Integer.parseInt(JOptionPane.showInputDialog("Enter the size of the table:"));
         int rows = cols;
 
-        if (gameFrame != null) {
-            gameFrame.dispose();
+        if(rows == 0){
+            JOptionPane.showMessageDialog(null,"0-at nem lehet értékül adni");
+            return;
         }
 
-        gameFrame = new GameOfLifeFrame(rows, cols);
-        gameFrame.setVisible(true);
-    }
+            if (gameFrame != null) {
+                gameFrame.dispose();
+            }
+            gameFrame = new GameOfLifeFrame(rows, cols);
+
+            gameFrame.setVisible(true);
+
+        }
 }
